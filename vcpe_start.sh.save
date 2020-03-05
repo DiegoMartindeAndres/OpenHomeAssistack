@@ -35,10 +35,7 @@ ETH21=`sudo docker exec -it $VNF2 ifconfig | grep eth1 | awk '{print $1}'`
 ETH31=`sudo docker exec -it $VNF3 ifconfig | grep eth1 | awk '{print $1}'`
 IP11=`sudo docker exec -it $VNF1 hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.100`
 IP31=`sudo docker exec -it $VNF3 hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.100`
-prov=`sudo docker exec -it mn.dc1_vcpe-1-2-ubuntu-1 ifconfig -a | awk '/192\.168\./ && /inet/{print $2}'`
-IP21="${prov:5:14}"
-
-
+IP21=`sudo docker exec -it $VNF2 sudo docker exec -it $VNF2 ifconfig -a | awk '/192\.168\./ && /inet/{print $2}'`
 echo $IP11
 echo $IP21
 echo $IP31
@@ -54,7 +51,7 @@ echo "--"
 echo "--Connecting vCPE service with AccessNet and ExtNet..."
 
 sudo ovs-docker add-port AccessNet veth0 $VNF1
-sudo ovs-docker add-port ExtNet veth0 $VNF3
+sudo ovs-docker add-port ExtNet veth2 $VNF3
 
 echo "--"
 echo "--Setting VNF..."
@@ -83,7 +80,7 @@ sudo docker exec -it $VNF3 ovs-vsctl add-port br2 vxlan1 -- set interface vxlan1
 sudo docker exec -it $VNF3 ifconfig br2 mtu 1400
 echo "OKEY3"
 ## 3. En VNF:vcpe asignar dirección IP a interfaz de salida.
-sudo docker exec -it $VNF3 /sbin/ifconfig veth0 $VCPEPUBIP/24
+sudo docker exec -it $VNF3 /sbin/ifconfig veth2 $VCPEPUBIP/24
 echo "1"
 sudo docker exec -it $VNF3 ip route del 0.0.0.0/0 via 172.17.0.1
 echo "2"
@@ -103,11 +100,5 @@ sleep 30
 
 ## 5. En VNF:vcpe activar NAT para dar salida a Internet 
 docker cp /usr/bin/vnx_config_nat  $VNF3:/usr/bin
-sudo docker exec -it $VNF3 /usr/bin/vnx_config_nat br2 veth0
-
-sudo docker exec -it $VNF3 iptables -A FORWARD -p tcp -d $IP21 --dport 8123 -j ACCEPT
-sudo docker exec -it $VNF3 iptables -A FORWARD -p tcp -s $IP21 --sport 8123 -j ACCEPT
-
-sudo docker exec -it $VNF3 iptables -A PREROUTING -t nat -p tcp -d 10.2.3.1 --dport 8123 -j DNAT --to-destination $IP21:8123
-sudo docker exec -it $VNF3 iptables -A POSTROUTING -t nat -p tcp -d $IP21 --dport 8123 -j SNAT --to-source 10.2.3.254
+sudo docker exec -it $VNF3 /usr/bin/vnx_config_nat br2 veth2
 

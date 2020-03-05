@@ -17,7 +17,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 VNF1="mn.dc1_$1-1-ubuntu-1"
-VNF2="mn.dc1_$1-2-ubuntu-1"
+VNF2="mn.dc1_$1-3-ubuntu-1"
 
 sudo ovs-docker del-port AccessNet veth0 $VNF1
 sudo ovs-docker del-port ExtNet veth0 $VNF2
