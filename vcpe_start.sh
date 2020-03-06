@@ -66,29 +66,30 @@ sudo docker exec -it $VNF1 ovs-vsctl add-br br0
 sudo docker exec -it $VNF1 ifconfig veth0 $VNFTUNIP/24
 sudo docker exec -it $VNF1 ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=$HOMETUNIP
 sudo docker exec -it $VNF1 ovs-vsctl add-port br0 vxlan2 -- set interface vxlan2 type=vxlan options:remote_ip=$IP21
-echo "OKEY"
-echo ""
-echo ""
+
+
 ## 2. En VNF:vcpe agregar un bridge y asociar interfaces.
 sudo docker exec -it $VNF2 ovs-vsctl add-br br1
-#sudo docker exec -it $VNF2 /sbin/ifconfig br1 $VCPEPRIVIP/24
+sudo docker exec -it $VNF2 /sbin/ifconfig br1 $VCPEPRIVIP/24
 sudo docker exec -it $VNF2 ovs-vsctl add-port br1 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=$IP11
 sudo docker exec -it $VNF2 ovs-vsctl add-port br1 vxlan2 -- set interface vxlan2 type=vxlan options:remote_ip=$IP31
 sudo docker exec -it $VNF2 ifconfig br1 mtu 1400
-echo "OKEY2"
+
+
 ## 2. En VNF:vcpe agregar un bridge y asociar interfaces.
 sudo docker exec -it $VNF3 ovs-vsctl add-br br2
 sudo docker exec -it $VNF3 /sbin/ifconfig br2 $VCPEPRIVIP/24
 sudo docker exec -it $VNF3 ovs-vsctl add-port br2 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=$IP21
 sudo docker exec -it $VNF3 ifconfig br2 mtu 1400
-echo "OKEY3"
+
+
 ## 3. En VNF:vcpe asignar dirección IP a interfaz de salida.
 sudo docker exec -it $VNF3 /sbin/ifconfig veth0 $VCPEPUBIP/24
-echo "1"
 sudo docker exec -it $VNF3 ip route del 0.0.0.0/0 via 172.17.0.1
-echo "2"
 sudo docker exec -it $VNF3 ip route add 0.0.0.0/0 via 10.2.3.254
-echo "OKEY ULTIMO"
+
+
+
 ## 4. Iniciar Servidor DHCP 
 echo "--"
 echo "--DHCP Server Starting..."
@@ -104,10 +105,14 @@ sleep 30
 ## 5. En VNF:vcpe activar NAT para dar salida a Internet 
 docker cp /usr/bin/vnx_config_nat  $VNF3:/usr/bin
 sudo docker exec -it $VNF3 /usr/bin/vnx_config_nat br2 veth0
-
 sudo docker exec -it $VNF3 iptables -A FORWARD -p tcp -d $IP21 --dport 8123 -j ACCEPT
 sudo docker exec -it $VNF3 iptables -A FORWARD -p tcp -s $IP21 --sport 8123 -j ACCEPT
-
 sudo docker exec -it $VNF3 iptables -A PREROUTING -t nat -p tcp -d 10.2.3.1 --dport 8123 -j DNAT --to-destination $IP21:8123
 sudo docker exec -it $VNF3 iptables -A POSTROUTING -t nat -p tcp -d $IP21 --dport 8123 -j SNAT --to-source 10.2.3.254
+
+
+sleep 5
+sudo vnx -f nfv3_home_lxc_ubuntu64.xml -t
+sleep 15
+sudo vnx -f nfv3_server_lxc_ubuntu64.xml -t
 
