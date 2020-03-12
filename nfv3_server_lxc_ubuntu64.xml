@@ -43,6 +43,8 @@ SPAIN
   <net name="ExtNet" mode="openvswitch" managed="no"/>
   <net name="Internet" mode="virtual_bridge" managed="yes"/>
   <net name="virbr0" mode="virtual_bridge" managed="no"/>
+  <net name="Net3" mode="virtual_bridge" />
+
   
   <vm name="r1" type="lxc" exec_mode="lxc-attach" arch="x86_64">
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
@@ -53,7 +55,10 @@ SPAIN
       <ipv4>10.2.2.1/24</ipv4>
     </if>
     <if id="9" net="virbr0">
-      <ipv4>dhcp</ipv4>
+      <ipv4>10.2.4.1/24</ipv4>
+    </if>
+    <if id="3" net="Net3">
+      <ipv4>10.1.3.1/24</ipv4>
     </if>
     <forwarding type="ip" />
     <filetree seq="on_boot" root="/usr/bin/" perms="755">/usr/bin/vnx_config_nat</filetree>
@@ -69,4 +74,13 @@ SPAIN
     </if>
     <route type="ipv4" gw="10.2.2.1">default</route>
   </vm>
+
+  <host>
+    <hostif net="Net3">
+       <ipv4>10.1.3.2/24</ipv4>
+    </hostif>
+    <route type="ipv4" gw="10.1.3.1">default</route>
+  </host>
+
+
 </vnx>
