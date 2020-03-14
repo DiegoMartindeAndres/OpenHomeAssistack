@@ -55,9 +55,10 @@ SPAIN
     <forwarding type="ip" />
     <!-- Copy the content of conf/txtfile directory in the host to
       the /var/www directory in the virtual machine -->
-    <filetree seq="on_boot" root="/etc/" perms="777">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
+    <filetree seq="on_boot" root="/usr/bin/" perms="755">/usr/bin/vnx_config_nat</filetree>
     <exec seq="on_boot" type="verbatim">
         route add default gw 10.255.0.1 eth2
+       /usr/bin/vnx_config_nat eth2 eth1
     </exec>
   </vm>
 
@@ -66,7 +67,7 @@ SPAIN
     <if id="1" net="home1net">
       <ipv4>10.2.2.2/24</ipv4>
     </if>
-    <route type="ipv4" gw="10.2.2.1">default</route>
+    <route type="ipv4" gw="10.2.2.10">default</route>
   </vm>
 
   <vm name="h12" type="lxc" exec_mode="lxc-attach" arch="x86_64">
@@ -74,7 +75,7 @@ SPAIN
     <if id="1" net="home1net">
       <ipv4>10.2.2.3/24</ipv4>
     </if>
-    <route type="ipv4" gw="10.2.2.1">default</route>
+    <route type="ipv4" gw="10.2.2.10">default</route>
   </vm>
 
 

@@ -97,6 +97,7 @@ sudo docker exec -it $VNF2 ip route add 0.0.0.0/0 via 10.2.3.254
 sudo docker exec -it $VNF1 route delete default gw 172.17.0.1 eth1-0
 sudo docker exec -it $VNF1 route add default gw $IP21 eth1-0
 sudo docker exec -it $VNF2 ip route add 10.255.0.0/24 via $IP11
+sudo docker exec -it $VNF1 ip route add 10.2.2.0/24 via 10.255.0.2
 
 ## 4. Iniciar Servidor DHCP 
 echo "--"
@@ -129,7 +130,7 @@ sudo docker exec -it $VNF2 iptables-restore < /etc/iptables.rules
 #sudo docker exec -it $VNF2 iptables-save
 
 
-sleep 10
+sleep 5
 sudo vnx -f nfv3_home_lxc_ubuntu64.xml -t
 sleep 15
 sudo vnx -f nfv3_server_lxc_ubuntu64.xml -t
