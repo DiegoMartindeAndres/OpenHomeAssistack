@@ -116,7 +116,7 @@ docker cp /usr/bin/vnx_config_nat  $VNF2:/usr/bin
 sudo docker exec -it $VNF2 /usr/bin/vnx_config_nat br2 veth0
 docker cp /usr/bin/vnx_config_nat  $VNF1:/usr/bin
 sudo docker exec -it $VNF1 /usr/bin/vnx_config_nat veth0 eth1-0
-
+docker cp /home/upm/Desktop/NFV-LAB-2019/configuration.yaml  $VNF1:/config
 
 
 sudo docker exec -it $VNF2 iptables -t nat -A PREROUTING -p tcp -d 10.2.3.1 --dport 8123 -j DNAT --to-destination $IP11:8123
