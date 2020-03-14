@@ -39,85 +39,43 @@ SPAIN
         <console id="1" display="yes"/>
     </vm_defaults>
   </global>
-    
-  <net name="virbr0" mode="virtual_bridge" managed="no"/>
 
+
+  <net name="home1net" mode="virtual_bridge" managed="yes"/>
   <net name="AccessNet" mode="openvswitch" managed="no"/>
-  <net name="home1net" mode="virtual_bridge" />
-  <net name="home2net" mode="virtual_bridge" />
-  
-  <vm name="h11" type="lxc" exec_mode="lxc-attach" arch="x86_64">
+
+  <vm name="br1" type="lxc" exec_mode="lxc-attach" arch="x86_64">
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
     <if id="1" net="home1net">
-      <ipv4>dhcp</ipv4>
-    </if>
-    <exec seq="on_boot" type="verbatim">
-       # Change MgmtNet and TunnNet interfaces MTU
-       ifconfig eth1 mtu 1400
-       sed -i -e '/iface eth1 inet static/a \   mtu 1400' /etc/network/interfaces
-    </exec>
-  </vm>   
-  <vm name="h12" type="lxc" exec_mode="lxc-attach" arch="x86_64">
-    <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
-    <if id="1" net="home1net">
-      <ipv4>dhcp</ipv4>
-    </if>
-    <exec seq="on_boot" type="verbatim">
-       # Change MgmtNet and TunnNet interfaces MTU
-       ifconfig eth1 mtu 1400
-       sed -i -e '/iface eth1 inet static/a \   mtu 1400' /etc/network/interfaces
-    </exec>
-  </vm> 
-  <vm name="brg1" type="lxc" exec_mode="lxc-attach" arch="x86_64">
-    <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
-    <if id="1" net="home1net">
+      <ipv4>10.2.2.10/24</ipv4>
     </if>
     <if id="2" net="AccessNet">
       <ipv4>10.255.0.2/24</ipv4>
     </if>
+    <forwarding type="ip" />
+    <!-- Copy the content of conf/txtfile directory in the host to
+      the /var/www directory in the virtual machine -->
+    <filetree seq="on_boot" root="/etc/" perms="777">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
     <exec seq="on_boot" type="verbatim">
-        service openvswitch-switch start
-        sleep 5
-        ovs-vsctl add-br br0
-        ovs-vsctl add-port br0 eth1
-        ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=10.255.0.1
+        route add default gw 10.255.0.1 eth2
     </exec>
   </vm>
-  <vm name="h21" type="lxc" exec_mode="lxc-attach" arch="x86_64">
+
+  <vm name="h11" type="lxc" exec_mode="lxc-attach" arch="x86_64">
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
-    <if id="1" net="home2net">
-      <ipv4>dhcp</ipv4>
+    <if id="1" net="home1net">
+      <ipv4>10.2.2.2/24</ipv4>
     </if>
-    <exec seq="on_boot" type="verbatim">
-       # Change MgmtNet and TunnNet interfaces MTU
-       ifconfig eth1 mtu 1400
-       sed -i -e '/iface eth1 inet static/a \   mtu 1400' /etc/network/interfaces
-    </exec>
-  </vm>   
-  <vm name="h22" type="lxc" exec_mode="lxc-attach" arch="x86_64">
-    <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
-    <if id="1" net="home2net">
-      <ipv4>dhcp</ipv4>
-    </if>
-    <exec seq="on_boot" type="verbatim">
-       # Change MgmtNet and TunnNet interfaces MTU
-       ifconfig eth1 mtu 1400
-       sed -i -e '/iface eth1 inet static/a \   mtu 1400' /etc/network/interfaces
-    </exec>
-  </vm> 
-  <vm name="brg2" type="lxc" exec_mode="lxc-attach" arch="x86_64">
-    <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
-    <if id="1" net="home2net">
-    </if>
-    <if id="2" net="AccessNet">
-      <ipv4>10.255.0.4/24</ipv4>
-    </if>
-    <exec seq="on_boot" type="verbatim">
-        service openvswitch-switch start
-        sleep 5
-        ovs-vsctl add-br br0
-        ovs-vsctl add-port br0 eth1
-        ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=10.255.0.3
-    </exec>
+    <route type="ipv4" gw="10.2.2.1">default</route>
   </vm>
+
+  <vm name="h12" type="lxc" exec_mode="lxc-attach" arch="x86_64">
+    <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
+    <if id="1" net="home1net">
+      <ipv4>10.2.2.3/24</ipv4>
+    </if>
+    <route type="ipv4" gw="10.2.2.1">default</route>
+  </vm>
+
+
 </vnx>
