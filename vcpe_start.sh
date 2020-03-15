@@ -130,8 +130,20 @@ sudo docker exec -it $VNF2 iptables-restore < /etc/iptables.rules
 #sudo docker exec -it $VNF2 iptables-save
 
 
-sleep 5
+sleep 3
 sudo vnx -f nfv3_home_lxc_ubuntu64.xml -t
-sleep 15
+sleep 8
 sudo vnx -f nfv3_server_lxc_ubuntu64.xml -t
+
+
+
+sleep 3
+sudo lxc-attach -n r1 -- dhclient
+sudo lxc-attach -n h11 -- apt-get update 
+sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients
+sudo lxc-attach -n h12 -- apt-get update 
+sudo lxc-attach -n h12 -- apt-get -y install mosquitto mosquitto-clients
+sudo lxc-attach -n br1 -- apt-get update 
+sudo lxc-attach -n br1 -- apt-get -y install mosquitto mosquitto-clients
+
 

@@ -56,10 +56,14 @@ SPAIN
     <!-- Copy the content of conf/txtfile directory in the host to
       the /var/www directory in the virtual machine -->
     <filetree seq="on_boot" root="/usr/bin/" perms="755">/usr/bin/vnx_config_nat</filetree>
+    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
     <exec seq="on_boot" type="verbatim">
-        route add default gw 10.255.0.1 eth2
-       /usr/bin/vnx_config_nat eth2 eth1
+	route add default gw 10.255.0.1 eth2
+	/usr/bin/vnx_config_nat eth2 eth1
+	sudo rm /etc/resolv.conf
+	mv /root/resolv.conf /etc/
     </exec>
+
   </vm>
 
   <vm name="h11" type="lxc" exec_mode="lxc-attach" arch="x86_64">
@@ -68,6 +72,11 @@ SPAIN
       <ipv4>10.2.2.2/24</ipv4>
     </if>
     <route type="ipv4" gw="10.2.2.10">default</route>
+    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
+    <exec seq="on_boot" type="verbatim">
+	sudo rm /etc/resolv.conf
+	mv /root/resolv.conf /etc/
+    </exec>
   </vm>
 
   <vm name="h12" type="lxc" exec_mode="lxc-attach" arch="x86_64">
@@ -76,6 +85,11 @@ SPAIN
       <ipv4>10.2.2.3/24</ipv4>
     </if>
     <route type="ipv4" gw="10.2.2.10">default</route>
+    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
+    <exec seq="on_boot" type="verbatim">
+	sudo rm /etc/resolv.conf
+	mv /root/resolv.conf /etc/
+    </exec>
   </vm>
 
 
