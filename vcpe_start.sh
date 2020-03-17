@@ -145,5 +145,7 @@ sudo lxc-attach -n h12 -- apt-get update
 sudo lxc-attach -n h12 -- apt-get -y install mosquitto mosquitto-clients
 sudo lxc-attach -n br1 -- apt-get update 
 sudo lxc-attach -n br1 -- apt-get -y install mosquitto mosquitto-clients
-
+sudo lxc-attach -n aux -- apt-get update 
+sudo lxc-attach -n aux -- apt-get -y install mosquitto mosquitto-clients
+sudo lxc-attach -n br1 -- sudo bash script.sh
 

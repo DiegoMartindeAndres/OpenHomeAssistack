@@ -46,13 +46,14 @@ SPAIN
       <ipv4>10.2.3.254/24</ipv4>
     </if>
     <if id="2" net="Internet">
-      <ipv4>10.2.2.1/24</ipv4>
+      <ipv4>10.2.4.1/24</ipv4>
     </if>
     <if id="9" net="virbr0">
       <ipv4>dhcp</ipv4>
     </if>
     <forwarding type="ip" />
     <filetree seq="on_boot" root="/usr/bin/" perms="755">/usr/bin/vnx_config_nat</filetree>
+    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/script.sh</filetree>
     <exec seq="on_boot" type="verbatim">
        /usr/bin/vnx_config_nat eth1 eth9
        iptables -t nat -A PREROUTING -p tcp -d 192.168.122.227 --dport 8123 -j DNAT --to-destination 10.2.3.1:8123
@@ -65,9 +66,9 @@ SPAIN
   <vm name="s1" type="lxc" exec_mode="lxc-attach" arch="x86_64">
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
     <if id="1" net="Internet">
-      <ipv4>10.2.2.2/24</ipv4>
+      <ipv4>10.2.4.2/24</ipv4>
     </if>
-    <route type="ipv4" gw="10.2.2.1">default</route>
+    <route type="ipv4" gw="10.2.4.1">default</route>
   </vm>
 
 
