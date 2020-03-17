@@ -1,3 +1,5 @@
+while true
+do
 if ping -q -c 1 -W 1 10.255.0.1 >/dev/null; then
   echo "IPv4 is up"
   sleep 15
@@ -24,5 +26,6 @@ else
   echo "mqtt:" >> /root/.homeassistant/configuration.yaml 
   echo "  broker: 10.2.2.4" >> /root/.homeassistant/configuration.yaml 
 fi
+done
 
 
