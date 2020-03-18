@@ -101,7 +101,7 @@ Puedes encontrar mucho más de cómo utilizar este proyecto en el Trabajo de Fin
 
 ## Licencia 📄
 
-Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
+José Antonio Álvarez Marí - 2020
 
 
 
