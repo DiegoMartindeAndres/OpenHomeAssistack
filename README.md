@@ -36,17 +36,17 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 	Paso 3: Agregar en VNF Packages los ficheros previamente descargados "vnf-home.tar.gz" y "vnx-vcpe.tar.gz".
 
-	Paso 4: Ejecutar el comando osm vim-list para conocer el nombre de la instancia VIM (ej: emu-vimXX).
+	Paso 4: Ejecutar en la terminal el comando osm vim-list para conocer el nombre de la instancia VIM (ej: emu-vimXX).
 
-	Paso 5: Ejecutar ./init.sh para crear los openvswitch AccessNet y ExtNet.
+	Paso 5: Dirigirse a la carpeta previamente clonada de github y ejecutar ./init.sh para crear los openvswitch AccessNet y ExtNet.
 
-	Paso 6: Dirigirse a la carpeta previamente clonada de github y ejecutar sudo bash ./startAll.sh
+	Paso 6: Desde esa misma carpeta, ejecutar sudo bash ./startAll.sh para iniciar el despliegue del escenario.
 
-	Paso 7: Ingresar en Ns name: vcpe-1
+	Paso 7: Ingresar en la petición Ns name: vcpe-1
 
-	Paso 8: Ingresar en Nsd name: vCPE
+	Paso 8: Ingresar en la petición Nsd name: vCPE
 
-	Paso 9: Ingresar en Vim account el nombre la instancia obtenida en el paso 4.
+	Paso 9: Ingresar en la petición Vim account el nombre la instancia obtenida en el paso 4.
 
 
 
