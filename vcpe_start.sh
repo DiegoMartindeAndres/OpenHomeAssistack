@@ -28,7 +28,6 @@ sudo osm ns-create
 sleep 15
 VNF1="mn.dc1_$1-1-ubuntu-1"
 VNF2="mn.dc1_$1-2-ubuntu-1"
-#VNF3="mn.dc1_$1-3-ubuntu-1"
 
 VNFTUNIP="$2"
 HOMETUNIP="$3"
@@ -36,10 +35,8 @@ VCPEPRIVIP="$4"
 VCPEPUBIP="$5"
 DHCPDCONF="$6"
 
-#ETH11=`sudo docker exec -it $VNF1 ifconfig | grep eth1 | awk '{print $1}'`
 ETH11=`sudo docker exec -it $VNF1 ifconfig | grep eth1 | awk '{print $1}'`
 ETH21=`sudo docker exec -it $VNF2 ifconfig | grep eth1 | awk '{print $1}'`
-#IP11=`sudo docker exec -it $VNF1 hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.100`
 IP21=`sudo docker exec -it $VNF2 hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.100`
 prov=`sudo docker exec -it mn.dc1_vcpe-1-1-ubuntu-1 ifconfig -a | awk '/192\.168\./ && /inet/{print $2}'`
 IP11="${prov:5:14}"
@@ -67,29 +64,34 @@ echo "--Setting VNF..."
 echo "--"
 echo "--Bridge Creating..."
 
-## 1. En VNF:vclass agregar un bridge y asociar interfaces.
-#sudo docker exec -it $VNF1 ovs-vsctl add-br br0
-#sudo docker exec -it $VNF1 ifconfig veth0 $VNFTUNIP/24
-#sudo docker exec -it $VNF1 ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=$HOMETUNIP
-#sudo docker exec -it $VNF1 ovs-vsctl add-port br0 vxlan2 -- set interface vxlan2 type=vxlan options:remote_ip=$IP21
+
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+
+
+## 1. En VNF:home agregar un bridge y asociar interfaces.
+sudo docker exec -it $VNF1 ovs-vsctl add-br br1
+sudo docker exec -it $VNF1 ifconfig veth0 $VNFTUNIP netmask 255.255.255.0
+
+
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
 
 
 ## 2. En VNF:vcpe agregar un bridge y asociar interfaces.
-sudo docker exec -it $VNF1 ovs-vsctl add-br br1
-sudo docker exec -it $VNF1 ifconfig veth0 $VNFTUNIP netmask 255.255.255.0
-#sudo docker exec -it $VNF1 ovs-vsctl add-port br1 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=$HOMETUNIP
-#sudo docker exec -it $VNF1 ovs-vsctl add-port br1 vxlan2 -- set interface vxlan2 type=vxlan options:remote_ip=$IP21
-#sudo docker exec -it $VNF1 ifconfig br1 mtu 1400
-
-
-## 3. En VNF:vcpe agregar un bridge y asociar interfaces.
 sudo docker exec -it $VNF2 ovs-vsctl add-br br2
 sudo docker exec -it $VNF2 /sbin/ifconfig br2 $VCPEPRIVIP/24
-#sudo docker exec -it $VNF2 ovs-vsctl add-port br2 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=$IP11
 sudo docker exec -it $VNF2 ifconfig br2 mtu 1400
 
 
-#Vcpe: asignar dirección IP a interfaz de salida.
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+
+
+## 3.VCPE: asignar rutas a la interfaz de salida y a la interfaz de entrada.
 sudo docker exec -it $VNF2 /sbin/ifconfig veth0 $VCPEPUBIP/24
 sudo docker exec -it $VNF2 ip route del 0.0.0.0/0 via 172.17.0.1
 sudo docker exec -it $VNF2 ip route add 0.0.0.0/0 via 10.2.3.254
@@ -98,6 +100,12 @@ sudo docker exec -it $VNF1 route delete default gw 172.17.0.1 eth1-0
 sudo docker exec -it $VNF1 route add default gw $IP21 eth1-0
 sudo docker exec -it $VNF2 ip route add 10.255.0.0/24 via $IP11
 sudo docker exec -it $VNF1 ip route add 10.2.2.0/24 via 10.255.0.2
+
+
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+
 
 ## 4. Iniciar Servidor DHCP 
 echo "--"
@@ -111,32 +119,44 @@ fi
 sudo docker exec -it $VNF2 service isc-dhcp-server restart
 sleep 30
 
-## 5. En VNF:vcpe activar NAT para dar salida a Internet 
+
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+
+
+## 5. En VNF:vcpe y home configuramos NAT para dar salida a Internet y redirigir conexiones entrantes al router
+######en el puerto 8213 al docker de Home Assistant. 
 docker cp /usr/bin/vnx_config_nat  $VNF2:/usr/bin
 sudo docker exec -it $VNF2 /usr/bin/vnx_config_nat br2 veth0
 docker cp /usr/bin/vnx_config_nat  $VNF1:/usr/bin
 sudo docker exec -it $VNF1 /usr/bin/vnx_config_nat veth0 eth1-0
 docker cp /home/upm/Desktop/NFV-LAB-2019/configuration.yaml  $VNF1:/config
 
-
 sudo docker exec -it $VNF2 iptables -t nat -A PREROUTING -p tcp -d 10.2.3.1 --dport 8123 -j DNAT --to-destination $IP11:8123
 sudo docker exec -it $VNF2 iptables -t nat -A POSTROUTING ! -s 127.0.0.1 -j MASQUERADE
 sudo docker exec -it $VNF2 iptables-save > /etc/iptables.rules
 sudo docker exec -it $VNF2 iptables-restore < /etc/iptables.rules
-#sudo docker exec -it $VNF2 iptables -A FORWARD -p tcp -d $IP11 --dport 8123 -j ACCEPT
-#sudo docker exec -it $VNF2 iptables -A FORWARD -p tcp -s $IP11 --sport 8123 -j ACCEPT
-#sudo docker exec -it $VNF2 iptables -A PREROUTING -t nat -p tcp -d 10.2.3.1 --dport 8123 -j DNAT --to-destination $IP11:8123
-#sudo docker exec -it $VNF2 iptables -A POSTROUTING -t nat -p tcp -d $IP11 --dport 8123 -j SNAT --to-source 10.2.3.254
-#sudo docker exec -it $VNF2 iptables-save
 
 
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+
+
+## 6. Arrancar los escenarios virtuales.
 sleep 3
 sudo vnx -f nfv3_home_lxc_ubuntu64.xml -t
 sleep 8
 sudo vnx -f nfv3_server_lxc_ubuntu64.xml -t
 
 
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
 
+
+## 7. Asignamos IP externa a R1 e instalamos mosquitto en los equipos de la red residencial.
 sleep 3
 sudo lxc-attach -n r1 -- dhclient
 sudo lxc-attach -n h11 -- apt-get update 
@@ -147,5 +167,13 @@ sudo lxc-attach -n br1 -- apt-get update
 sudo lxc-attach -n br1 -- apt-get -y install mosquitto mosquitto-clients
 sudo lxc-attach -n aux -- apt-get update 
 sudo lxc-attach -n aux -- apt-get -y install mosquitto mosquitto-clients
+
+
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------#
+
+
+## 8. Lanzamos script de Connectivity Testing.
 sudo lxc-attach -n br1 -- sudo bash /root/script.sh
 
