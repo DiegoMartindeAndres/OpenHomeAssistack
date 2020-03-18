@@ -113,4 +113,4 @@ José Antonio Álvarez Marí 2020
 
 ## Expresiones de Gratitud 🎁
 
-Gracias a mis tutores Diego Martín de Andrés y a David Fernández Cambronero por la ayuda recibida durante el desarrollo y la puesta en marcha de este proyecto.
+Gracias a mis tutores Diego Martín de Andrés y David Fernández Cambronero por la ayuda recibida durante el desarrollo y la puesta en marcha de este proyecto.
