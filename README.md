@@ -19,10 +19,6 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 - Realizar un git clone de "".
 
 
-***Mira **Deployment** para conocer como desplegar el proyecto.
-
-
-
 
 ### Pre-requisitos 📋
 
