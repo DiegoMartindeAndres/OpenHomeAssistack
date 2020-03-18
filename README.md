@@ -87,15 +87,9 @@ En caso de que en OSM el VIM no esté correctamente enlazado en el menú VIM Acc
 
 
 
-## Contribuyendo 🖇️
-
-Por favor lee el [CONTRIBUTING.md](https://gist.github.com/villanuevand/xxxxxx) para detalles de nuestro código de conducta, y el proceso para enviarnos pull requests.
-
-
-
 ## Wiki 📖
 
-Puedes encontrar mucho más de cómo utilizar este proyecto en el TFM: de José Antonio Álvarez Marí.
+Puedes encontrar mucho más de cómo utilizar este proyecto en el Trabajo de Fin de Máster de José Antonio Álvarez Marí (Servicio biblioteca UPM).
 
 
 
