@@ -20,7 +20,7 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 
 
-### Pre-requisitos 📋
+## Pre-requisitos 📋
 
 - Es necesario contar con un ordenador con capacidad de virtualización y una herramienta VirtualBox o similar.
 
@@ -28,7 +28,7 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 
 
-### Instalación 🔧
+## Instalación 🔧
 
 	Paso 1: Dirigirse a "https://localhost/auth/?next=/" e ingresar "admin" tanto como usuario como contraseña.
 
