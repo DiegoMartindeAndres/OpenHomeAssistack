@@ -60,7 +60,7 @@ Cuando el script finalice, se puede realizar las siguientes pruebas para comprob
 
 
 
-### Pruebas de conectividad avanzada 🔩
+## Pruebas de conectividad avanzada 🔩
 
 Una vez puesto en marcha el escenario y comprobado su correcto funcionamiento, se puede probar la tolerancia a fallos de conexión externa realizando el siguiente comando:
 
