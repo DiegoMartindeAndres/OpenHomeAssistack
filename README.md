@@ -80,9 +80,9 @@ Se debe comprobar como se despliega automaticamente en br1 una instancia secunda
 
 - Para acceder a los contenedores de las VNF instanciadas se debe ejecutar:
 
-	Ventana para VNF:home --> sudo docker exec -it mn.dc1_vcpe-1-1-ubuntu-1 bash
-	
-	Ventana para VNF:vcpe --> sudo docker exec -it mn.dc1_vcpe-1-2-ubuntu-1 bash
+		Ventana para VNF:home --> sudo docker exec -it mn.dc1_vcpe-1-1-ubuntu-1 bash
+
+		Ventana para VNF:vcpe --> sudo docker exec -it mn.dc1_vcpe-1-2-ubuntu-1 bash
 
 
 
