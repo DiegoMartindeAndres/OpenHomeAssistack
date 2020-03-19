@@ -74,7 +74,7 @@ Se debe comprobar como se despliega automaticamente en br1 una instancia secunda
 
 - En caso de que en OSM el VIM no esté correctamente enlazado en el menú VIM Accounts, inicialice vim-emu tecleando el comando: osm-restart-vimemu .
 
-- Suele ser necesario hacer un restart de la instancia Home Assistant para que se recargue la nueva configuración. Esto se hace desde el menú Configuración, dirigiéndose a la pestaña de Controles de Servidor.
+- Suele ser necesario hacer un restart de la instancia Home Assistant para que se recargue la nueva configuración. Esto se hacer desde el menú Configuración, dirigiéndose a la pestaña de Controles de Servidor.
 
 
 
