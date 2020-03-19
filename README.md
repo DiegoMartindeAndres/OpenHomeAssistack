@@ -16,7 +16,7 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 - Desplegarla con VirtualBox (o similar) asignandole al menos 6GB de RAM.
 
-- Realizar un git clone de "".
+- Realizar un git clone de https://github.com/jalvarezmari/TFM.
 
 
 
