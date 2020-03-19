@@ -2,6 +2,8 @@
 
 El objetivo de este proyecto es desplegar un escenario virtual compuesto por una red residencial, una instancia de Open Source Mano formada por dos contenedores Docker (Home Assistant y vCPE) que emula una central local, y una red externa con conectividad a Internet y a un servidor virtual. 
 
+En este proyecto se va a utilizar la plataforma de código abierto Open Source Mano (OSM) para profundizar en las funciones de red virtualizadas y su orquestación. El escenario que se va a desplegar está inspirado en la transformación de las centrales locales a centros de datos que permiten reemplazar servicios de red ofrecidos mediante hardware específico y propietario por servicios de red definidos por software sobre hardware de propósito general. Las funciones de red que se despliegan en estas centrales se gestionan mediante una plataforma de orquestación conocida como Open Source Mano. 
+
 Se pretende demostrar que es posible desplegar una instancia Home Assistant en una central local definida por software con plena conectividad tanto interna como externa. 
 
 Adicionalmente, se pretende dotar al escenario de protección frente a caídas de conectividad instalando una instancia secundaria de Home Assistant en la red residencial, la cual realiza un pull periódico al fichero de configuración de la instancia primaria en la central local, estando así sincronizada y lista para funcionar en caso de caída del servicio principal.  
