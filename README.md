@@ -79,9 +79,8 @@ Se debe comprobar como se despliega automaticamente en br1 una instancia secunda
 - Suele ser necesario hacer un restart de la instancia Home Assistant para que se recargue la nueva configuración. Esto se hacer desde el menú Configuración, dirigiéndose a la pestaña de Controles de Servidor.
 
 - Para acceder a los contenedores de las VNF instanciadas se debe ejecutar:
-
-	Ventana para VNF:home --> sudo docker exec -it mn.dc1_vcpe-1-1-ubuntu-1 bash
-	Ventana para VNF:vcpe --> sudo docker exec -it mn.dc1_vcpe-1-2-ubuntu-1 bash
+--Ventana para VNF:home --> sudo docker exec -it mn.dc1_vcpe-1-1-ubuntu-1 bash
+--Ventana para VNF:vcpe --> sudo docker exec -it mn.dc1_vcpe-1-2-ubuntu-1 bash
 
 
 
