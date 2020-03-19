@@ -30,7 +30,7 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 ## Instalación 🔧
 
-	Paso 1: Dirigirse a "https://localhost/auth/?next=/" e ingresar "admin" tanto como usuario como contraseña.
+	Paso 1: Dirigirse a "https://localhost/auth/?next=/" e ingresar "admin" tanto en usuario en contraseña.
 
 	Paso 2: Agregar en NS Packages el fichero previamente descargado "ns-vcpe.tar.gz".
 
