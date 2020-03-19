@@ -4,7 +4,7 @@ El objetivo de este proyecto es desplegar un escenario virtual compuesto por una
 
 Se pretende demostrar que es posible desplegar una instancia Home Assistant en una central local definida por software con plena conectividad tanto interna como externa. 
 
-Adicionalmente, se pretende dotar al escenario de protección frente a caídas de conectividad instalando una instancia secundaria de Home Assistant en la red residencial, la cual realiza un pull periodico al fichero de configuración de la instancia primaria en la central local, estando así lista para funcionar en caso de caída del servicio principal.  
+Adicionalmente, se pretende dotar al escenario de protección frente a caídas de conectividad instalando una instancia secundaria de Home Assistant en la red residencial, la cual realiza un pull periódico al fichero de configuración de la instancia primaria en la central local, estando así sincronizada y lista para funcionar en caso de caída del servicio principal.  
 
 
 
