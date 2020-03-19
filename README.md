@@ -82,7 +82,7 @@ Se debe comprobar como se despliega automaticamente en br1 una instancia secunda
 
 * [VNX](https://web.dit.upm.es/vnxwiki/index.php/Main_Page) - Open-source virtualization tool
 * [HomeAssistant](https://www.home-assistant.io/) - Smart Hub
-
+* [OpenSourceMano](https://osm.etsi.org/) - Open Source Management and Orchestration (MANO)
 
 
 ## Wiki 📖
