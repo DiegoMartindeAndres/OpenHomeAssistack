@@ -107,7 +107,7 @@ Puedes encontrar mucho más de cómo utilizar este proyecto en el Trabajo de Fin
 
 ## Licencia 📄
 
-José Antonio Álvarez Marí - 2020
+José Antonio Álvarez Marí - 2020 - UPM
 
 
 
