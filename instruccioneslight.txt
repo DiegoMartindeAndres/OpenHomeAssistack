@@ -1,0 +1,12 @@
+   36  nano simple-sensor.py
+   37  python simple-sensor.py -b 10.2.2.10
+   38  python3 simple-sensor.py 
+   39  pip3 install paho-mqtt python-etcd
+   40  apt-get install pip3
+   41  sudo apt-get install python3-pip
+   42  pip3 install paho-mqtt python-etcd
+   43  python3 simple-sensor.py 
+   44  nano simple-sensor.py 
+   45  python3 simple-sensor.py 
+   46  mosquitto_sub -h 10.2.2.10 -t "jose"
+   47  python3 simple-sensor.py -b 10.2.2.10
