@@ -160,7 +160,9 @@ sudo vnx -f nfv3_server_lxc_ubuntu64.xml -t
 sleep 3
 sudo lxc-attach -n r1 -- dhclient
 sudo lxc-attach -n h11 -- apt-get update 
-sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients
+sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients python3-pip
+sudo lxc-attach -n h11 -- pip3 install paho-mqtt python-etcd
+sudo lxc-attach -n h11 -- python3 sensor.py -b 10.2.2.10
 sudo lxc-attach -n h12 -- apt-get update 
 sudo lxc-attach -n h12 -- apt-get -y install mosquitto mosquitto-clients
 sudo lxc-attach -n br1 -- apt-get update 
@@ -175,5 +177,6 @@ sudo lxc-attach -n aux -- apt-get -y install mosquitto mosquitto-clients
 
 
 ## 8. Lanzamos script de Connectivity Testing.
+sleep 60
 sudo lxc-attach -n br1 -- sudo bash /root/script.sh
 
