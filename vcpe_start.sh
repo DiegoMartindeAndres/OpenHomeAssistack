@@ -19,15 +19,13 @@ if [[ $# -ne 6 ]]; then
     echo "$USAGE"
     exit 1
 fi
-SC="vcpe-1"
-SC1="vCPE"
-SC2="emu-vim12"
+
+
 sudo osm ns-create
 
 
 sleep 15
 VNF1="mn.dc1_$1-1-ubuntu-1"
-VNF2="mn.dc1_$1-2-ubuntu-1"
 
 VNFTUNIP="$2"
 HOMETUNIP="$3"
@@ -36,28 +34,32 @@ VCPEPUBIP="$5"
 DHCPDCONF="$6"
 
 ETH11=`sudo docker exec -it $VNF1 ifconfig | grep eth1 | awk '{print $1}'`
-ETH21=`sudo docker exec -it $VNF2 ifconfig | grep eth1 | awk '{print $1}'`
-IP21=`sudo docker exec -it $VNF2 hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.100`
+#ETH21=`sudo docker exec -it $VNF2 ifconfig | grep eth1 | awk '{print $1}'`
+#IP21=`sudo docker exec -it $VNF2 hostname -I | awk '{printf "%s\n", $1}{print $2}' | grep 192.168.100`
 prov=`sudo docker exec -it mn.dc1_vcpe-1-1-ubuntu-1 ifconfig -a | awk '/192\.168\./ && /inet/{print $2}'`
 IP11="${prov:5:14}"
 
 
 echo $IP11
-echo $IP21
+#echo $IP21
 
 ##################### VNFs Settings #####################
 ## 0. Iniciar el Servicio OpenVirtualSwitch en cada VNF:
 echo "--"
 echo "--OVS Starting..."
 sudo docker exec -it $VNF1 /usr/share/openvswitch/scripts/ovs-ctl start
-sudo docker exec -it $VNF2 /usr/share/openvswitch/scripts/ovs-ctl start
+#sudo docker exec -it $VNF2 /usr/share/openvswitch/scripts/ovs-ctl start
 #sudo docker exec -it $VNF3 /usr/share/openvswitch/scripts/ovs-ctl start
 
 echo "--"
 echo "--Connecting vCPE service with AccessNet and ExtNet..."
 
+
 sudo ovs-docker add-port AccessNet veth0 $VNF1
-sudo ovs-docker add-port ExtNet veth0 $VNF2
+sleep 5
+sudo ovs-docker add-port ExtNet veth1 $VNF1
+sleep 5
+
 
 echo "--"
 echo "--Setting VNF..."
@@ -72,18 +74,23 @@ echo "--Bridge Creating..."
 
 ## 1. En VNF:home agregar un bridge y asociar interfaces.
 sudo docker exec -it $VNF1 ovs-vsctl add-br br1
+
 sudo docker exec -it $VNF1 ifconfig veth0 $VNFTUNIP netmask 255.255.255.0
-
-
+sudo docker exec -it $VNF1 ifconfig veth1 $VCPEPUBIP netmask 255.255.255.0
+echo ""
+echo ""
+echo "----------------------------DONE----------------------------------"
+echo ""
+echo ""
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#
 
 
 ## 2. En VNF:vcpe agregar un bridge y asociar interfaces.
-sudo docker exec -it $VNF2 ovs-vsctl add-br br2
-sudo docker exec -it $VNF2 /sbin/ifconfig br2 $VCPEPRIVIP/24
-sudo docker exec -it $VNF2 ifconfig br2 mtu 1400
+#sudo docker exec -it $VNF2 ovs-vsctl add-br br2
+#sudo docker exec -it $VNF2 /sbin/ifconfig br2 $VCPEPRIVIP/24
+#sudo docker exec -it $VNF2 ifconfig br2 mtu 1400
 
 
 #------------------------------------------------------------------------------------------------------------#
@@ -92,32 +99,28 @@ sudo docker exec -it $VNF2 ifconfig br2 mtu 1400
 
 
 ## 3.VCPE: asignar rutas a la interfaz de salida y a la interfaz de entrada.
-sudo docker exec -it $VNF2 /sbin/ifconfig veth0 $VCPEPUBIP/24
-sudo docker exec -it $VNF2 ip route del 0.0.0.0/0 via 172.17.0.1
-sudo docker exec -it $VNF2 ip route add 0.0.0.0/0 via 10.2.3.254
 
-sudo docker exec -it $VNF1 route delete default gw 172.17.0.1 eth1-0
-sudo docker exec -it $VNF1 route add default gw $IP21 eth1-0
-sudo docker exec -it $VNF2 ip route add 10.255.0.0/24 via $IP11
+sudo docker exec -it $VNF1 ip route del 0.0.0.0/0 via 172.17.0.1
+sudo docker exec -it $VNF1 ip route add 0.0.0.0/0 via 10.2.3.254
+echo ""
+echo ""
+echo "----------------------------DONE2----------------------------------"
+echo ""
+echo ""
+
+#sudo docker exec -it $VNF1 route delete default gw 172.17.0.1 eth0
+#sudo docker exec -it $VNF1 route add default gw 10.2.3.254 eth1-0
+#sudo docker exec -it $VNF1 ip route add 10.255.0.0/24 via $IP11
 sudo docker exec -it $VNF1 ip route add 10.2.2.0/24 via 10.255.0.2
 
-
+echo ""
+echo ""
+echo "----------------------------DONE3----------------------------------"
+echo ""
+echo ""
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#
-
-
-## 4. Iniciar Servidor DHCP 
-echo "--"
-echo "--DHCP Server Starting..."
-if [ -f "$DHCPDCONF" ]; then
-    echo "--Using $DHCPDCONF for DHCP"
-    docker cp $DHCPDCONF $VNF2:/etc/dhcp/dhcpd.conf
-else
-    echo "--$DHCPCONF not found for DHCP, the container will use the default"
-fi
-sudo docker exec -it $VNF2 service isc-dhcp-server restart
-sleep 30
 
 
 #------------------------------------------------------------------------------------------------------------#
@@ -127,16 +130,27 @@ sleep 30
 
 ## 5. En VNF:vcpe y home configuramos NAT para dar salida a Internet y redirigir conexiones entrantes al router
 ######en el puerto 8213 al docker de Home Assistant. 
-docker cp /usr/bin/vnx_config_nat  $VNF2:/usr/bin
-sudo docker exec -it $VNF2 /usr/bin/vnx_config_nat br2 veth0
+docker cp /usr/bin/vnx_config_nat  $VNF1:/usr/bin
+sudo docker exec -it $VNF1 /usr/bin/vnx_config_nat br1 veth1
+echo ""
+echo ""
+echo "----------------------------DONE4----------------------------------"
+echo ""
+echo ""
+
 docker cp /usr/bin/vnx_config_nat  $VNF1:/usr/bin
 sudo docker exec -it $VNF1 /usr/bin/vnx_config_nat veth0 eth1-0
+echo ""
+echo ""
+echo "----------------------------DONE5----------------------------------"
+echo ""
+echo ""
 docker cp /home/upm/Desktop/NFV-LAB-2019/configuration.yaml  $VNF1:/config
 
-sudo docker exec -it $VNF2 iptables -t nat -A PREROUTING -p tcp -d 10.2.3.1 --dport 8123 -j DNAT --to-destination $IP11:8123
-sudo docker exec -it $VNF2 iptables -t nat -A POSTROUTING ! -s 127.0.0.1 -j MASQUERADE
-sudo docker exec -it $VNF2 iptables-save > /etc/iptables.rules
-sudo docker exec -it $VNF2 iptables-restore < /etc/iptables.rules
+sudo docker exec -it $VNF1 iptables -t nat -A PREROUTING -p tcp -d 10.2.3.1 --dport 8123 -j DNAT --to-destination $IP11:8123
+sudo docker exec -it $VNF1 iptables -t nat -A POSTROUTING ! -s 127.0.0.1 -j MASQUERADE
+sudo docker exec -it $VNF1 iptables-save > /etc/iptables.rules
+sudo docker exec -it $VNF1 iptables-restore < /etc/iptables.rules
 
 
 #------------------------------------------------------------------------------------------------------------#

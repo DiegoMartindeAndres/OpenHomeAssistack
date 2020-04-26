@@ -1,12 +1,14 @@
 #!/bin/bash
 
 
+sudo ovs-vsctl del-br br1
+sudo ovs-vsctl del-br AccessNet
+sudo ovs-vsctl del-br ExtNet
 
 VNF1="mn.dc1_vcpe-1-1-ubuntu-1"
-VNF2="mn.dc1_vcpe-1-2-ubuntu-1"
 
 sudo ovs-docker del-port AccessNet veth0 $VNF1
-sudo ovs-docker del-port ExtNet veth0 $VNF2
+sudo ovs-docker del-port ExtNet veth1 $VNF1
 
 osm ns-delete vcpe-1
 sleep 3
