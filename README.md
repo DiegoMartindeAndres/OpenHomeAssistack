@@ -36,7 +36,7 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 	Paso 2: Agregar en NS Packages el fichero previamente descargado "ns-vcpe.tar.gz".
 
-	Paso 3: Agregar en VNF Packages los ficheros previamente descargados "vnf-home.tar.gz" y "vnx-vcpe.tar.gz".
+	Paso 3: Agregar en VNF Packages el fichero previamente descargado "vnf-home.tar.gz".
 
 	Paso 4: Ejecutar en la terminal el comando osm vim-list para conocer el nombre de la instancia VIM (ej: emu-vimXX).
 
@@ -57,7 +57,7 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 Cuando el script finalice, se puede realizar las siguientes pruebas para comprobar que el escenario se ha arrancado correctamente:
 
 - Ping desde h11/h12/br1 a 8.8.8.8 (conectividad externa).
-- Ping desde las dos instancias docker a 8.8.8.8 (conectividad externa).
+- Ping desde la instancia docker a 8.8.8.8 (conectividad externa).
 - Curl o wget desde s1 a 10.2.3.1:8123 para comprobar la redirección de la ip publica del servicio general a la ip privada de Home Assistant, obteniendo satisfactoriamente un fichero index.html.
 
 
@@ -78,11 +78,9 @@ Se debe comprobar como se despliega automaticamente en br1 una instancia secunda
 
 - Suele ser necesario hacer un restart de la instancia Home Assistant para que se recargue la nueva configuración. Esto se hacer desde el menú Configuración, dirigiéndose a la pestaña de Controles de Servidor.
 
-- Para acceder a los contenedores de las VNF instanciadas se debe ejecutar:
+- Para acceder al contenedor de la VNF instanciada se debe ejecutar:
 
 		Ventana para VNF:home --> sudo docker exec -it mn.dc1_vcpe-1-1-ubuntu-1 bash
-
-		Ventana para VNF:vcpe --> sudo docker exec -it mn.dc1_vcpe-1-2-ubuntu-1 bash
 
 
 
