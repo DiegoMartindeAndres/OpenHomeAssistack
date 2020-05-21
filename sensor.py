@@ -1,17 +1,12 @@
 #! python3.4
-#Simple Light or door type Sensor that can receive control Information to change state
-###demo code provided by Steve Cope at www.steves-internet-guide.com
-##sensor uses loop and standard reconnect
-##email steve@steves-internet-guide.com
-###Free to use for any purpose
+
 import paho.mqtt.client as mqtt
-#import testclient as mqtt
 import json
 import os
 import time
 import logging,random,os
 import sys,getopt
-#from mqtt_functions import *
+
 options=dict()
 brokers=["192.168.1.206","192.168.1.157","192.168.1.204","192.168.1.185","test.mosquitto.org",\
          "broker.hivemq.com","iot.eclipse.org"]
@@ -35,7 +30,6 @@ options["sensor_type"]="light"
 options["topic_base"]="sensors"
 options["interval"]=10 #loop time when sensor publishes in verbose
 options["interval_pub"]=300 # in non chatty mode publish
-# status at this interval if 0 then ignore
 options["keepalive"]=120
 options["loglevel"]=logging.ERROR
 cname=""
@@ -49,7 +43,9 @@ password=""
 chatty=False
 interval=2 #loop time when sensor publishes
 sensor_pub_interval=300# how often to publish if status is unchanged
-##
+
+
+
 def command_input(options):
     topics_in=[]
     qos_in=[]
@@ -111,8 +107,6 @@ def command_input(options):
 
 
 
-##callback all others defined in mqtt-functions.py
-
 def on_message(client,userdata, msg):
     print(client)
     print(userdata)
@@ -126,7 +120,7 @@ def on_message(client,userdata, msg):
 
 
 def message_handler(client,msg,topic):
-    if topic==topic_control: #got control message
+    if topic==topic_control: #Recibido control message
         print("control message ",msg)
         update_status(client,msg)
     
@@ -138,7 +132,6 @@ def on_connect(client, userdata, flags, rc):
     if rc==0:
         client.connected_flag=True
         client.publish(connected_topic,1,retain=True)
-        #publish connection status
         client.subscribe(options["topics"])
     else:
         client.bad_connection_flag=True 
@@ -155,7 +148,7 @@ def on_disconnect(client, userdata, rc):
 
 def update_status(client,status):
     status=status.upper()
-    if status==states[0] or status==states[1]: #Valid status
+    if status==states[0] or status==states[1]: #Si esta dentro de los margenes aceptados
         client.sensor_status=status #update
         print("updating status",client.sensor_status)
 
@@ -208,8 +201,6 @@ def Initialise_clients(cname):
     client.on_connect= on_connect        #attach function to callback
     client.on_message=on_message        #attach function to callback
     client.on_disconnect=on_disconnect
-    #client.on_subscribe=on_subscribe
-    #client.on_publish=on_publish
     return client
 
 
@@ -272,14 +263,12 @@ def wait_for(client,msgType,period=.25,wait_time=40,running_loop=False):
         if not client.running_loop:
             client.loop(.01)  #check for messages manually
         time.sleep(period)
-        #print("loop flag ",client.running_loop)
         wcount+=1
         if wcount>wait_time:
             print("return from wait loop taken too long")
             return False
-###############
 
-#####
+
 
 if __name__ == "__main__" and len(sys.argv)>=2:
     command_input(options)
@@ -297,11 +286,11 @@ else:
 
 
 
-##May want to change topics
+##Por si se quieren cambiar los topics
 connected_topic=options["topic_base"]+"/connected/"+"light"
 sensor_status_topic=options["topic_base"]+"/"+"light"
 topic_control=sensor_status_topic+"/control"
-#########
+
 
 
 
@@ -310,24 +299,27 @@ options["topics"]=[(topic_control,0)]
 if not options["verbose"]:
     print("only sending changes")
 
+
 if options["sensor_type"]=="light":
     states=["ON","OFF"] #possible sensor states
 else:
     states=["OPEN","CLOSED"] #possible sensor states    
 Initialise_client_object() # add extra flags
 
+
 logging.info("creating client"+cname)
 client=Initialise_clients(cname)#create and initialise client object
 if options["username"] !="":
     client.username_pw_set(options["username"],options["password"])
 client.will_set(connected_topic,0, qos=0, retain=True) #set will
-print("starting")
+print("Starting")
 print("Publishing on ",sensor_status_topic)
-print("send control to ",topic_control)
+print("Send control to ",topic_control)
 print("Sensors States are ",states)
+
+
 start_flag=True #used to always publish when starting
 run_flag=True
-#connecting_flag=False
 bad_conn_count=0
 try:
     while run_flag:
