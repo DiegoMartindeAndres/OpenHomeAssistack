@@ -15,7 +15,17 @@ import sys,getopt
 options=dict()
 brokers=["192.168.1.206","192.168.1.157","192.168.1.204","192.168.1.185","test.mosquitto.org",\
          "broker.hivemq.com","iot.eclipse.org"]
-options["broker"]=brokers[1]
+
+def yesno():
+    answer = input("¿Desea conectarse al broker '192.168.1.157'? (yes/no): ")
+    if answer == "yes":
+        options["broker"]=brokers[1]
+    elif answer == "no":
+        options["broker"]= input("Introduzca la direccion del broker al que desea conectarse: ")
+    else:
+        print("Please enter yes or no.")
+yesno()
+
 options["port"]=1883
 options["verbose"]=False
 options["username"]=""
@@ -98,22 +108,30 @@ def command_input(options):
     if topics_in:
         options["topics"]=topics_in
 
-#######
+
 
 
 ##callback all others defined in mqtt-functions.py
 
 def on_message(client,userdata, msg):
+    print(client)
+    print(userdata)
+    print(msg)
     topic=msg.topic
     m_decode=str(msg.payload.decode("utf-8","ignore"))
     logging.debug("Message Received "+m_decode)
+    print(m_decode)
     message_handler(client,m_decode,topic)
+
+
 
 def message_handler(client,msg,topic):
     if topic==topic_control: #got control message
         print("control message ",msg)
         update_status(client,msg)
     
+
+
 def on_connect(client, userdata, flags, rc):
     logging.debug("Connected flags"+str(flags)+"result code "\
     +str(rc)+"client1_id")
@@ -124,17 +142,24 @@ def on_connect(client, userdata, flags, rc):
         client.subscribe(options["topics"])
     else:
         client.bad_connection_flag=True 
+
+
+
 def on_disconnect(client, userdata, rc):
     logging.debug("disconnecting reason  " + str(rc))
     client.connected_flag=False
     client.disconnect_flag=True
     client.subscribe_flag=False 
-#######
+
+
+
 def update_status(client,status):
     status=status.upper()
     if status==states[0] or status==states[1]: #Valid status
         client.sensor_status=status #update
         print("updating status",client.sensor_status)
+
+
 
 def publish_status(client):
     global start_flag #used to publish on start
@@ -173,6 +198,8 @@ def Initialise_client_object():
     mqtt.Client.disconnect_flagset=False
     mqtt.Client.pub_msg_count=0
     
+
+
 def Initialise_clients(cname):
     #flags set
     client= mqtt.Client(cname)
@@ -184,6 +211,8 @@ def Initialise_clients(cname):
     #client.on_subscribe=on_subscribe
     #client.on_publish=on_publish
     return client
+
+
 
 def Connect(client,broker,port,keepalive,run_forever=False):
     """Attempts connection set delay to >1 to keep trying
@@ -224,8 +253,10 @@ def Connect(client,broker,port,keepalive,run_forever=False):
             elif delay<300:
                 delay=30*badcount
         time.sleep(delay)
-                
     return 0
+
+
+
 def wait_for(client,msgType,period=.25,wait_time=40,running_loop=False):
     #running loop is true when using loop_start or loop_forever
     client.running_loop=running_loop #
@@ -261,13 +292,21 @@ if not options["cname"]:
     cname="sensor-"+str(r)
 else:
     cname=str(options["cname"])
+
+
+
+
+
 ##May want to change topics
-connected_topic=options["topic_base"]+"/connected/"+cname
-sensor_status_topic=options["topic_base"]+"/"+cname
+connected_topic=options["topic_base"]+"/connected/"+"light"
+sensor_status_topic=options["topic_base"]+"/"+"light"
 topic_control=sensor_status_topic+"/control"
 #########
+
+
+
+
 options["topics"]=[(topic_control,0)]
-#print(options["topics"])
 if not options["verbose"]:
     print("only sending changes")
 
@@ -310,6 +349,3 @@ if client.connected_flag:
     client.publish(connected_topic,0,retain=True)
     time.sleep(1)
     client.disconnect()
-
-
-
