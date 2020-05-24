@@ -1,6 +1,6 @@
 #  Implementación de un sistema de gestión domótica para dispositivos IoT desplegado en una arquitectura basada en computación en la niebla.
 
-El objetivo de este proyecto es desplegar un escenario virtual compuesto por una red residencial, una instancia de Open Source Mano formada por dos contenedores Docker (Home Assistant y vCPE) que emula una central local, y una red externa con conectividad a Internet y a un servidor virtual. 
+El objetivo de este proyecto es desplegar un escenario virtual compuesto por una red residencial, una instancia de Open Source Mano formada por un contenedor Docker (Home Assistant) que emula su instanciación en una central local, y una red externa con conectividad a Internet y a un servidor virtual. 
 
 En este proyecto se va a utilizar la plataforma de código abierto Open Source Mano (OSM) para profundizar en las funciones de red virtualizadas y su orquestación. El escenario que se va a desplegar está inspirado en la transformación de las centrales locales a centros de datos que permiten reemplazar servicios de red ofrecidos mediante hardware específico y propietario por servicios de red definidos por software sobre hardware de propósito general. Las funciones de red que se despliegan en estas centrales se gestionan mediante una plataforma de orquestación conocida como Open Source Mano. 
 
@@ -16,9 +16,9 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 - Descargar la maquina virtual VNXSDNNFVLAB2020-v1.ova desde https://idefix.dit.upm.es/download/vnx/vnx-vm/VNXSDNNFVLAB2020-v1.ova
 
-- Desplegarla con VirtualBox (o similar) asignandole al menos 6GB de RAM.
+- Desplegarla con VirtualBox (o similar) asignandole al menos 6GB de RAM (recomendado).
 
-- Realizar un git clone de https://github.com/jalvarezmari/TFM.
+- Realizar un git clone del repositorio https://github.com/DiegoMartindeAndres/OpenHomeAssistack.git.
 
 
 
@@ -31,28 +31,44 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 
 ## Instalación 🔧
+	
+	Paso 1: Dirigirse a la carpeta previamente descargada del repositorio.
 
-	Paso 1: Dirigirse a "https://localhost/auth/?next=/" e ingresar "admin" tanto en usuario en contraseña.
+	Paso 2: Crear la imagen docker que va a implementar la VNF mediante el fichero Dockerfile que se encuentran en el directorio “vnf-img2” usando los comandos "cd vnf-img2" y "sudo docker build -t vnf-img2 ."
 
-	Paso 2: Agregar en NS Packages el fichero previamente descargado "ns-vcpe.tar.gz".
+	Paso 3: Dirigirse a "https://localhost/auth/?next=/" e ingresar "admin" tanto en usuario en contraseña.
 
-	Paso 3: Agregar en VNF Packages el fichero previamente descargado "vnf-home.tar.gz".
+	Paso 4: Agregar en NS Packages el fichero previamente descargado "ns-vcpe.tar.gz".
 
-	Paso 4: Ejecutar en la terminal el comando osm vim-list para conocer el nombre de la instancia VIM (ej: emu-vimXX).
+	Paso 5: Agregar en VNF Packages el fichero previamente descargado "vnf-home.tar.gz".
 
-	Paso 5: Dirigirse a la carpeta previamente clonada de github y ejecutar ./init.sh para crear los openvswitch AccessNet y ExtNet.
+	Paso 6: Ejecutar en la terminal el comando osm vim-list para conocer el nombre de la instancia VIM (ej: emu-vimXX).
 
-	Paso 6: Desde esa misma carpeta, ejecutar sudo bash ./startAll.sh para iniciar el despliegue del escenario.
+	Paso 7: Dirigirse a la carpeta previamente clonada de github y ejecutar ./init.sh para crear los openvswitch AccessNet y ExtNet.
 
-	Paso 7: Ingresar en la petición Ns name: vcpe-1
+	Paso 8: Desde esa misma carpeta, ejecutar sudo bash vcpe1.sh para iniciar el despliegue del escenario.
 
-	Paso 8: Ingresar en la petición Nsd name: vCPE
+	Paso 9: Ingresar en la petición Ns name: vcpe-1
 
-	Paso 9: Ingresar en la petición Vim account el nombre la instancia obtenida en el paso 4.
+	Paso 10: Ingresar en la petición Nsd name: vCPE
+
+	Paso 11: Ingresar en la petición Vim account el nombre la instancia obtenida en el paso 4.
+
+	Paso 12 : Esperar a que el script termine de ejecutarse (puede durar varios minutos, se indica el final cuando las trazas equivalen a "IPv4 is up").
+
+	Paso 13: Acceso desde el navegador del host a la direccion externa de r1 (inspeccionarla mediante el comando ifconfig) en el puerto 1883.
+
+	Paso 14: Ingreso de los parámetros de registro y reinicio del servidor para que se aplique la nueva configuración.
+
+	Paso 14: Ejecucion desde h11 (o h12) del fichero sensor.py (o sensor2.py) mediante el comando "python3 sensor.py" (una vez se ejecute, se indicara el topic al que se le deben mandar los mensajes de control en las trazas de ejecución).
+
+	Paso 15: Envio de mensajes desde MQTT (en Developer Tools de Home Assistant) hacia el sensor.py mediante la introduccion de un topic y el mensaje ON u OFF (si es el termostato los valores permitidos son 16,17,18,19,20,21,22,23,24,25,26).
+
+	Paso 16: Confirmar la recepcion de las ordenes en la consola de h11.
 
 
 
-## Pruebas de conectividad ⚙️
+## Pruebas de conectividad y funcionamiento ⚙️
 
 Cuando el script finalice, se puede realizar las siguientes pruebas para comprobar que el escenario se ha arrancado correctamente:
 
@@ -68,13 +84,13 @@ Una vez puesto en marcha el escenario y comprobado su correcto funcionamiento, s
 
 - Desde br1: ifdown eth2
 
-Se debe comprobar como se despliega automaticamente en br1 una instancia secundaria de Home Assistant con la misma configuración que tenía la instancia principal en la central local.
+Se debe comprobar como se despliega automaticamente en br1 una instancia secundaria de Home Assistant con la misma configuración que tenía la instancia principal en la central local. Se puede acceder a ella con el navegador del host mediante la  direccion IP externa asignada a br1. Es necesario un reinicio de Home Assistant una vez se haya desplegado.
 
 
 
 ## Notas adicionales para el despliegue 📦
 
-- En caso de que en OSM el VIM no esté correctamente enlazado en el menú VIM Accounts, inicialice vim-emu tecleando el comando: osm-restart-vimemu .
+- En caso de que en OSM el VIM no esté correctamente enlazado en el menú VIM Accounts, inicialice vim-emu tecleando el comando: "osm-restart-vimemu".
 
 - Suele ser necesario hacer un restart de la instancia Home Assistant para que se recargue la nueva configuración. Esto se hacer desde el menú Configuración, dirigiéndose a la pestaña de Controles de Servidor.
 
