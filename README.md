@@ -8,6 +8,8 @@ Se pretende demostrar que es posible desplegar una instancia Home Assistant en u
 
 Adicionalmente, se pretende dotar al escenario de protección frente a caídas de conectividad instalando una instancia secundaria de Home Assistant en la red residencial, la cual realiza un pull periódico al fichero de configuración de la instancia primaria en la central local, estando así sincronizada y lista para funcionar en caso de caída del servicio principal.  
 
+Al no poder contar con dispositivos IoT reales, se han diseñado en Python mediante ejemplos encontrados en Internet dos dispositivos inteligentes: una bombilla y un termostato. Estos programas se encuentran en el mismo repositorio con los nombres "sensor.py" y "sensor2.py".
+
 
 
 ## Comenzando 🚀
