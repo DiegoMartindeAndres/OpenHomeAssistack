@@ -170,6 +170,8 @@ sudo docker exec -it $VNF1 rc-update add sshd
 sudo docker exec -it $VNF1 rc-status
 sudo docker exec -it $VNF1 touch /run/openrc/softlevel
 sudo docker exec -it $VNF1 /etc/init.d/sshd start
+sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' configuration.yaml
+
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#

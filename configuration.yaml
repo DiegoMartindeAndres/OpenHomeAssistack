@@ -14,5 +14,5 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 mqtt:
-  broker: 10.255.0.2
+  broker:10.255.0.2
 
