@@ -164,6 +164,7 @@ sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRo
 sudo docker exec -it $VNF1 sed '$ a StrictHostKeyChecking no' /etc/ssh/sshd_config 
 sudo docker exec -it $VNF1 /etc/init.d/sshd restart
 
+sudo lxc-attach -n br1 -- apt-get update && apt-get install sshpass
 sudo lxc-attach -n br1 -- sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo lxc-attach -n br1 -- sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication no/' /etc/ssh/sshd_config
 sudo lxc-attach -n br1 --  /etc/init.d/sshd restart
