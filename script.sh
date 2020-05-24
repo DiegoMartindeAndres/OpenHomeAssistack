@@ -4,9 +4,9 @@ while true
 do
 if ping -q -c 1 -W 1 10.255.0.1 >/dev/null; then
   echo "IPv4 is up"
-  /usr/bin/sshpass -p $PASSWORD scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
+  /usr/bin/sshpass -p "$PASSWORD" scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
   sleep 5
-  /usr/bin/sshpass -p $PASSWORD scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
+  /usr/bin/sshpass -p "$PASSWORD" scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
 else
   echo "IPv4 is down"
   if pgrep -x "$SERVICE" >/dev/null
@@ -15,7 +15,7 @@ else
     sleep 15
   else
     echo "$SERVICE stopped"
-    sed -i 's/broker: 10.255.0.2/broker: 10.2.2.4/' configuration.yaml
+    sed -i "s/broker: 10.255.0.2/broker: 10.2.2.4/" configuration.yaml
     route add default gw 192.168.122.1 eth9
     /usr/bin/vnx_config_nat eth1 eth9
     sudo apt-get update
