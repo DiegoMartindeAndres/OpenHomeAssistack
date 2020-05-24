@@ -178,7 +178,7 @@ sudo lxc-attach -n br1 --  /etc/init.d/ssh restart
 sudo lxc-attach -n h11 -- apt-get update 
 sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients python3-pip
 sudo lxc-attach -n h11 -- pip3 install paho-mqtt python-etcd
-sudo lxc-attach -n br1 -- sshpass -p 'root' scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
+sudo lxc-attach -n br1 -- sudo /usr/bin/sshpass -p 'root' scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
 #sudo lxc-attach -n h12 -- apt-get update 
 #sudo lxc-attach -n h12 -- apt-get -y install mosquitto mosquitto-clients
 #sudo lxc-attach -n br1 -- apt-get update 
@@ -194,5 +194,5 @@ sudo lxc-attach -n br1 -- sshpass -p 'root' scp  -o StrictHostKeyChecking=no roo
 
 ## 8. Lanzamos script de Connectivity Testing.
 sleep 60
-sudo lxc-attach -n br1 -- sudo sh /root/script.sh
+sudo lxc-attach -n br1 -- sudo bash /root/script.sh
 
