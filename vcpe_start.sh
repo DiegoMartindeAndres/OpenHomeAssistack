@@ -160,7 +160,7 @@ sudo docker exec -it $VNF1 rc-update add sshd
 sudo docker exec -it $VNF1 rc-status
 sudo docker exec -it $VNF1 touch /run/openrc/softlevel
 sudo docker exec -it $VNF1 /etc/init.d/sshd start
-sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' sshd_config
+sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo lxc-attach -n h11 -- apt-get update 
 sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients python3-pip
 sudo lxc-attach -n h11 -- pip3 install paho-mqtt python-etcd
