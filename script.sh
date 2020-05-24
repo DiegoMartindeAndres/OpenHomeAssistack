@@ -32,6 +32,7 @@ else
     sleep 30
     python3 -m pip install wheel
     pip3 install homeassistant
+    mv /root/configuration.yaml /root/.homeassistant/
     hass &
     sleep 55
     # uncomment to start hass if stopped
