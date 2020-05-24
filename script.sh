@@ -31,7 +31,7 @@ else
     pip3 install homeassistant
     hass &
     sleep 55
-    sed -i 's/broker:10.255.0.2/broker:10.2.2.4/' configuration.yaml
+    sed -i 's/broker: 10.255.0.2/broker: 10.2.2.4/' configuration.yaml
     # uncomment to start hass if stopped
     # systemctl start nginx
     # mail
