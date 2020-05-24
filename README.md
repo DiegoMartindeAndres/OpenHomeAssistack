@@ -32,7 +32,7 @@ Para desplegar el proyecto en tu máquina virtual, es necesario:
 
 
 
-## Instalación 🔧
+## Instalación y puesta en marcha 🔧
 	
 	Paso 1: Dirigirse a la carpeta previamente descargada del repositorio.
 
