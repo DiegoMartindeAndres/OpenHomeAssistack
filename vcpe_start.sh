@@ -164,11 +164,12 @@ sudo lxc-attach -n br1 -- apt-get -y install mosquitto mosquitto-clients
 sudo lxc-attach -n aux -- apt-get update 
 sudo lxc-attach -n aux -- apt-get -y install mosquitto mosquitto-clients
 sudo docker exec -it $VNF1 apk add openssh
+sudo docker exec -it $VNF1 apk add sshpass
 sudo docker exec -it $VNF1 apk add openrc
 sudo docker exec -it $VNF1 rc-update add sshd
 sudo docker exec -it $VNF1 rc-status
+sudo docker exec -it $VNF1 touch /run/openrc/softlevel
 sudo docker exec -it $VNF1 /etc/init.d/sshd start
-sudo docker exec -it $VNF1 passwd --stdin <<< "$josejosejose"
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#

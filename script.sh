@@ -3,7 +3,7 @@ while true
 do
 if ping -q -c 1 -W 1 10.255.0.1 >/dev/null; then
   echo "IPv4 is up"
-  scp root@10.255.0.1:/config/configuration.yaml .
+  sshpass -p 'root' scp root@10.255.0.1:/config/configuration.yaml .
   sleep 15
 else
   echo "IPv4 is down"
