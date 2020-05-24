@@ -190,5 +190,5 @@ sudo lxc-attach -n h11 -- python3 sensor.py -b 10.2.2.10
 
 ## 8. Lanzamos script de Connectivity Testing.
 sleep 60
-sudo lxc-attach -n br1 -- sudo bash /root/script.sh
+sudo lxc-attach -n br1 -- sudo sh /root/script.sh
 
