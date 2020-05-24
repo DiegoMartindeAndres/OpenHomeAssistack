@@ -153,6 +153,14 @@ sudo vnx -f nfv3_server_lxc_ubuntu64.xml -t
 ## 7. Asignamos IP externa a R1 e instalamos mosquitto en los equipos de la red residencial.
 sleep 3
 sudo lxc-attach -n r1 -- dhclient
+sudo docker exec -it $VNF1 apk add openssh
+sudo docker exec -it $VNF1 apk add sshpass
+sudo docker exec -it $VNF1 apk add openrc
+sudo docker exec -it $VNF1 rc-update add sshd
+sudo docker exec -it $VNF1 rc-status
+sudo docker exec -it $VNF1 touch /run/openrc/softlevel
+sudo docker exec -it $VNF1 /etc/init.d/sshd start
+sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' sshd_config
 sudo lxc-attach -n h11 -- apt-get update 
 sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients python3-pip
 sudo lxc-attach -n h11 -- pip3 install paho-mqtt python-etcd
@@ -163,14 +171,7 @@ sudo lxc-attach -n br1 -- apt-get update
 sudo lxc-attach -n br1 -- apt-get -y install mosquitto mosquitto-clients
 sudo lxc-attach -n aux -- apt-get update 
 sudo lxc-attach -n aux -- apt-get -y install mosquitto mosquitto-clients
-sudo docker exec -it $VNF1 apk add openssh
-sudo docker exec -it $VNF1 apk add sshpass
-sudo docker exec -it $VNF1 apk add openrc
-sudo docker exec -it $VNF1 rc-update add sshd
-sudo docker exec -it $VNF1 rc-status
-sudo docker exec -it $VNF1 touch /run/openrc/softlevel
-sudo docker exec -it $VNF1 /etc/init.d/sshd start
-sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' configuration.yaml
+
 
 #------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------#
