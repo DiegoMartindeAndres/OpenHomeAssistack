@@ -194,5 +194,5 @@ sudo lxc-attach -n br1 -- sudo /usr/bin/sshpass -p 'root' scp  -o StrictHostKeyC
 
 ## 8. Lanzamos script de Connectivity Testing.
 sleep 25
-sudo lxc-attach -n br1 -- sudo /bin/bash /root/script.sh & sleep 5 ; kill $!
+sudo lxc-attach -n br1 -- sudo /bin/bash /root/script.sh
 
