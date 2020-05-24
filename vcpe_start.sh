@@ -169,7 +169,7 @@ sudo lxc-attach -n br1 -- apt-get update && apt-get install sshpass
 sudo lxc-attach -n br1 -- sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo lxc-attach -n br1 -- sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication no/' /etc/ssh/sshd_config
 sudo lxc-attach -n br1 -- ssh-keyscan 10.255.0.1 >> ~/.ssh/known_hosts
-sudo lxc-attach -n br1 --  /etc/init.d/sshd restart
+sudo lxc-attach -n br1 --  /etc/init.d/ssh restart
 
 sudo lxc-attach -n h11 -- apt-get update 
 sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients python3-pip
