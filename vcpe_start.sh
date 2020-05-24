@@ -175,12 +175,12 @@ sudo lxc-attach -n h11 -- apt-get update
 sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients python3-pip
 sudo lxc-attach -n h11 -- pip3 install paho-mqtt python-etcd
 sudo lxc-attach -n h11 -- python3 sensor.py -b 10.2.2.10
-sudo lxc-attach -n h12 -- apt-get update 
-sudo lxc-attach -n h12 -- apt-get -y install mosquitto mosquitto-clients
-sudo lxc-attach -n br1 -- apt-get update 
-sudo lxc-attach -n br1 -- apt-get -y install mosquitto mosquitto-clients
-sudo lxc-attach -n aux -- apt-get update 
-sudo lxc-attach -n aux -- apt-get -y install mosquitto mosquitto-clients
+#sudo lxc-attach -n h12 -- apt-get update 
+#sudo lxc-attach -n h12 -- apt-get -y install mosquitto mosquitto-clients
+#sudo lxc-attach -n br1 -- apt-get update 
+#sudo lxc-attach -n br1 -- apt-get -y install mosquitto mosquitto-clients
+#sudo lxc-attach -n aux -- apt-get update 
+#sudo lxc-attach -n aux -- apt-get -y install mosquitto mosquitto-clients
 
 
 #------------------------------------------------------------------------------------------------------------#

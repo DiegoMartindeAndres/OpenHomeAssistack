@@ -5,7 +5,8 @@ do
 if ping -q -c 1 -W 1 10.255.0.1 >/dev/null; then
   echo "IPv4 is up"
   sshpass -p 'root' scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
-  sleep 15
+  sleep 5
+  sshpass -p 'root' scp  -o StrictHostKeyChecking=no root@10.255.0.1:/config/configuration.yaml .
 else
   echo "IPv4 is down"
   if pgrep -x "$SERVICE" >/dev/null
