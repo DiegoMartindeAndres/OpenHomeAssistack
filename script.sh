@@ -13,7 +13,7 @@ else
     sleep 15
   else
     echo "$SERVICE stopped"
-    sed -i 's/broker:10.255.0.2/broker: 10.2.2.4/' configuration.yaml
+    sed -i 's/broker: 10.255.0.2/broker: 10.2.2.4/' configuration.yaml
     route add default gw 192.168.122.1 eth9
     /usr/bin/vnx_config_nat eth1 eth9
     sudo apt-get update
