@@ -1,5 +1,5 @@
 SERVICE="hass"
-sudo apt-get install sshpass
+
 while true
 do
 if ping -q -c 1 -W 1 10.255.0.1 >/dev/null; then
