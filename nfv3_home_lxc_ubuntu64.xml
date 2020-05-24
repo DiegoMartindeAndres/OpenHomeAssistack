@@ -65,7 +65,7 @@ SPAIN
     <filetree seq="on_boot" root="/usr/bin/" perms="755">/usr/bin/vnx_config_nat</filetree>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/script.sh</filetree>
-    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/aux/configuration.yaml</filetree>
+    <!--filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/aux/configuration.yaml</filetree-->
     <exec seq="on_boot" type="verbatim">
 	route add default gw 10.255.0.1 eth2
 	/usr/bin/vnx_config_nat eth2 eth1

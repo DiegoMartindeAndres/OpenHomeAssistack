@@ -163,6 +163,11 @@ sudo docker exec -it $VNF1 /etc/init.d/sshd start
 sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo docker exec -it $VNF1 sed '$ a StrictHostKeyChecking no' /etc/ssh/sshd_config 
 sudo docker exec -it $VNF1 /etc/init.d/sshd restart
+
+sudo lxc-attach -n br1 -- sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+sudo lxc-attach -n br1 -- sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication no/' /etc/ssh/sshd_config
+sudo lxc-attach -n br1 --  /etc/init.d/sshd restart
+
 sudo lxc-attach -n h11 -- apt-get update 
 sudo lxc-attach -n h11 -- apt-get -y install mosquitto mosquitto-clients python3-pip
 sudo lxc-attach -n h11 -- pip3 install paho-mqtt python-etcd
