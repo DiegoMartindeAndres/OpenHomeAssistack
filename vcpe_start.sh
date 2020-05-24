@@ -162,11 +162,13 @@ sudo docker exec -it $VNF1 touch /run/openrc/softlevel
 sudo docker exec -it $VNF1 /etc/init.d/sshd start
 sudo docker exec -it $VNF1 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo docker exec -it $VNF1 sed '$ a StrictHostKeyChecking no' /etc/ssh/sshd_config 
+sudo docker exec -it $VNF1 ssh-keyscan 10.255.0.2 >> ~/.ssh/known_hosts
 sudo docker exec -it $VNF1 /etc/init.d/sshd restart
 
 sudo lxc-attach -n br1 -- apt-get update && apt-get install sshpass
 sudo lxc-attach -n br1 -- sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 sudo lxc-attach -n br1 -- sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication no/' /etc/ssh/sshd_config
+sudo lxc-attach -n br1 -- ssh-keyscan 10.255.0.1 >> ~/.ssh/known_hosts
 sudo lxc-attach -n br1 --  /etc/init.d/sshd restart
 
 sudo lxc-attach -n h11 -- apt-get update 
