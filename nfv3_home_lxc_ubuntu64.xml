@@ -83,6 +83,7 @@ SPAIN
     <route type="ipv4" gw="10.2.2.10">default</route>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/sensor.py</filetree>
+    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/sensor2.py</filetree>
     <exec seq="on_boot" type="verbatim">
 	sudo rm /etc/resolv.conf
 	mv /root/resolv.conf /etc/
@@ -97,6 +98,7 @@ SPAIN
     <route type="ipv4" gw="10.2.2.10">default</route>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/sensor.py</filetree>
+    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/sensor2.py</filetree>
     <exec seq="on_boot" type="verbatim">
 	sudo rm /etc/resolv.conf
 	mv /root/resolv.conf /etc/
@@ -111,6 +113,7 @@ SPAIN
     <route type="ipv4" gw="10.2.2.10">default</route>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/resolv.conf</filetree>
     <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/sensor.py</filetree>
+    <filetree seq="on_boot" root="/root" perms="755">/home/upm/Desktop/NFV-LAB-2019/sensor2.py</filetree>
     <exec seq="on_boot" type="verbatim">
 	sudo rm /etc/resolv.conf
 	mv /root/resolv.conf /etc/
